@@ -1,0 +1,12 @@
+.root {
+  width: 80vw;
+  
+  .submission {
+    display: flex;
+    justify-content: flex-end;
+  
+    .button {
+      margin: 10px;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+.root {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid;
+
+  .title {
+    font-size: x-large;
+    text-align: center;
+  }
+
+  .date {
+    font-size: large;
+    text-align: center;
+  }
+
+  .body {
+    font-size: large;
+  }
+
+  .readMore {
+    display: flex;
+    justify-content: center;
+    font-size: large;
+  }
+}

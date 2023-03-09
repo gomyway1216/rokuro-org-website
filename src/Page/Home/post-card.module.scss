@@ -1,0 +1,30 @@
+.postBody {
+  // // display: block;
+  // // display:inline-block;
+  // // width: 250px;
+  // overflow: hidden;
+  // white-space: nowrap;
+  // text-overflow: ellipsis;
+  // color: blue;
+  // font-size: x-large;
+}
+
+.root {
+
+  width: 400px;
+  height: 300px;
+  // margin-left: 2vw;
+  // margin-right: 2vw;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  padding: 30px;
+
+
+  .postBody {
+    font-size: large;
+    height: 200px;
+  }
+}
+
