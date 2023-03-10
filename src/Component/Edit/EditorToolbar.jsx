@@ -4,8 +4,6 @@ import * as storageApi from '../../Firebase/storage';
 import './editor-toolbar.scss';
 
 
-
-
 // Custom Undo button icon component for Quill editor. You can import it directly
 // from 'quill/assets/icons/undo.svg' but I found that a number of loaders do not
 // handle them correctly
@@ -33,7 +31,6 @@ const CustomRedo = () => (
 // Undo and redo functions for Custom Toolbar
 // arrow function cannot access quill object
 function undoChange() {
-  console.log('this2', this);
   this.quill.history.undo();
 }
 function redoChange() {
@@ -45,27 +42,16 @@ function selectLocalImage() {
   input.setAttribute('type', 'file');
   input.click();
 
-  console.log('this in selectLocalImage', this);
-
   input.onchange = async () => {
     const file = input.files[0];
 
     // file type is only image.
     if (/^image\//.test(file.type)) {
-      // saveImageToS3({ variables: { image: file } });
-
-      // await uploadImage(file);
       const downloadURL = await storageApi.getImageRef(file);
-      console.log('downloadURL', downloadURL);
-      console.log('this: ', this);
-      // const range = this.quill.current.editor.getSelection();
-      // this.quill.current.editor.insertEmbed(range.index, "image", downloadURL);
       const range = this.quill.getSelection(true);
-      // this.quill.enable(true);
       this.quill.editor.insertEmbed(range.index, 'image', downloadURL);
       this.quill.setSelection(range.index + 1);
       this.quill.insertText(range.index + 1, '');
-      // input.value = '';
     } else {
       alert('画像のみアップロードできます。');
     }
@@ -73,9 +59,6 @@ function selectLocalImage() {
 };
 
 // Add sizes to whitelist and register them
-// const Size = Quill.import('formats/size');
-// Size.whitelist = ['extra-small', 'small', 'medium', 'large'];
-// Quill.register(Size, true);
 let fontSizeStyle = Quill.import('attributors/style/size');
 fontSizeStyle.whitelist = ['10px', '16px', '30px', '50px'];
 Quill.register(fontSizeStyle, true);

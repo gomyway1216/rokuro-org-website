@@ -118,7 +118,7 @@ const ApplicationBar = () => {
           }
           <img src={rokuroIcon} className={styles.logo} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} 
-            onClick={handleItemClick} 
+            onClick={handleItemClick('home')}
             style={{ cursor: 'pointer' }}>
             Rokuro Org
           </Typography>

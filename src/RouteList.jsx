@@ -5,8 +5,7 @@ import HomePage from './Page/Home/HomePage';
 import AdminPage from './Page/Admin/AdminPage';
 import AdminSignInPage from './Page/Admin/AdminSignInPage';
 import EditPostPage from './Page/EditPost/EditPostPage';
-import EditInformationPage from './Page/EditPost/EditInformationPage';
-import PostsPage from './Page/Post/PostsPage';
+import EditInformationPage from './Page/EditInformation/EditInformationPage';
 import PostPage from './Page/Post/PostPage';
 
 const RouteList = () => {

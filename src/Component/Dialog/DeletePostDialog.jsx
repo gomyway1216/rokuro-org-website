@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, 
-  DialogTitle, List, ListItem, ListItemText, TextField } from '@mui/material';
+import { Button,Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 
 const DeletePostDialog = (props) => {
@@ -19,8 +18,8 @@ const DeletePostDialog = (props) => {
           {props.errorMessage ? props.errorMessage : 'Is that really ok?'}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => props.callback()}>Delete</Button>
           <Button onClick={() => props.onClose()}>Close</Button>
+          <Button onClick={() => props.callback()}>Delete</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -6,10 +6,9 @@ import DOMPurify from 'dompurify';
 import styles from './home-page.module.scss';
 import Posts from '../../Component/Post/Posts';
 import PostHistory from '../../Component/Post/PostHistory';
+import rokuroIcon from '../../asset/icon/rokuro-icon.png';
 
 const POST_QUERY_NUM = 0;
-const POST_CARD_WIDTH = 400;
-const POST_MARGIN = 40;
 
 const HomePage = () => {
   const { addRefs } = useRefContext();
@@ -32,7 +31,7 @@ const HomePage = () => {
   };
 
   const getPosts = async () => {
-    const result = await postApi.getPosts(POST_QUERY_NUM);
+    const result = await postApi.getPublishedPosts();
 
     setPosts(result);
   };
@@ -51,6 +50,7 @@ const HomePage = () => {
         className={styles.home} name='home'
       >   
         <div className={styles.homeContent}>
+          <img src={rokuroIcon} className={styles.logo} />
           <div className={styles.title}>Rokuro Org</div>
           <p className={styles.paragraph}>
             老齢化が進み長距離介護や在米介護をされている方が増加していますが、アメリカでは日本語で行うセミナーはほとんどありません。

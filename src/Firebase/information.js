@@ -8,14 +8,13 @@ export const getDbAccess = () => {
 };
 
 export const updateInformation = async (body) => {
-  console.log('update body:', body);
   try {
     await updateDoc(doc(getDbAccess(), 'information', docId), {
       body: body
     });
   } catch (err) {
     console.log('error when updating item: ', err);
-    // return err;
+    throw err;
   }
 };
 

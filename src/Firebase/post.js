@@ -1,6 +1,6 @@
 import * as fbConnect from './firebaseConnect';
 import { addDoc, collection, deleteDoc, getDoc, 
-  getDocs, doc, limit, query, updateDoc } from 'firebase/firestore';
+  getDocs, doc, limit, query, updateDoc, where } from 'firebase/firestore';
 
 export const getDbAccess = () => {
   return fbConnect.exportDbAccess();
@@ -19,7 +19,6 @@ export const createPost = async () => {
 };
 
 export const updatePost = async (item) => {
-  console.log('update item:', item);
   try {
     await updateDoc(doc(getDbAccess(), 'post', item.id), {
       title: item.title,
@@ -29,6 +28,7 @@ export const updatePost = async (item) => {
     });
   } catch (err) {
     console.log('error when updating item: ', err);
+    throw err;
   }
 };
 
@@ -66,6 +66,26 @@ export const getPosts = async (limitNum) => {
     const q = query(collection(getDbAccess(), 'post'), limit(limitNum));
     querySnapshot = await getDocs(q);
   }
+  for(let i = 0; i < querySnapshot.docs.length; i++) {
+    const postDoc = querySnapshot.docs[i];
+    const post = {
+      id: postDoc.id,
+      title: postDoc.data().title,
+      body: postDoc.data().body,
+      isPublic: postDoc.data().isPublic,
+      created: new Date(postDoc.data().created.seconds * 1000),
+      lastUpdated: new Date(postDoc.data().lastUpdated.seconds * 1000)
+    };
+    posts.push(post);
+  }
+  return posts;
+};
+
+export const getPublishedPosts = async () => {
+  const posts = [];
+  const q = query(collection(getDbAccess(), 'post'), 
+    where('isPublic', '==', true));
+  let querySnapshot = await getDocs(q);
   for(let i = 0; i < querySnapshot.docs.length; i++) {
     const postDoc = querySnapshot.docs[i];
     const post = {

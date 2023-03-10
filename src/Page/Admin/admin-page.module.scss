@@ -1,12 +1,22 @@
 .root {
-  width: 80vw;
-  
-  .submission {
+  margin-top: 80px;
+  margin-left: 5%;
+  margin-right: 5%;
+
+  .title {
+    text-align: center;
+    font-size: xx-large;
+    margin-bottom: 20px;
+  }
+
+  .buttons {
     display: flex;
+    flex-direction: row;
     justify-content: flex-end;
-  
+    margin-bottom: 20px;
+
     .button {
-      margin: 10px;
+      margin-left: 20px;
     }
   }
 }

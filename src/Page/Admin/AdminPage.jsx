@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as api from '../../Firebase/post';
-import PostTable from './PostTable';
+import PostTable from '../../Component/Post/PostTable';
+import styles from './admin-page.module.scss';
 
 
 const AdminPage = () => {
@@ -11,6 +12,7 @@ const AdminPage = () => {
   const [posts, setPosts] = useState([]);
 
   const getPosts = async () => {
+    setLoading(true);
     const ps = await api.getPosts();
     setPosts(ps);
     setLoading(false);
@@ -35,15 +37,15 @@ const AdminPage = () => {
   }
 
   return (
-    <div>
-      <div>AdminPage</div>
-      <PostTable posts={posts}/>
-      <div>
-        <Button variant="outlined" onClick={handleCreatePost}>Create Post</Button>
+    <div className={styles.root}>
+      <div className={styles.title}>AdminPage</div>
+      <div className={styles.buttons}>
+        <Button variant="outlined" onClick={handleCreatePost}
+          className={styles.button}>Create Post</Button>
+        <Button variant="outlined" onClick={handleEditInformation}
+          className={styles.button}>Edit Information</Button>
       </div>
-      <div>
-        <Button variant="outlined" onClick={handleEditInformation}>Edit Information</Button>
-      </div>
+      <PostTable posts={posts} callback={getPosts}/>
     </div>
   );
 };
