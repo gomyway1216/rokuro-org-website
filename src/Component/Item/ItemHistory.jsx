@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as util from '../../util/util';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import styles from './post-history.module.scss';
+import { Link } from 'react-router-dom';
+import styles from './item-history.module.scss';
 
-export const PostHistory = (props) => {
-  const { posts } = props;
+const ItemHistory = (props) => {
+  const { items, section } = props;
   
   return (
     <div className={styles.root}>
-      {posts.map(post => 
-        <div key={post.id + '-history'} className={styles.postLink}>
-          <Link to={'/post/' + post.id} 
-          >{util.formatJapaneseDate(post.created)}</Link>
+      {items.map(item => 
+        <div key={item.id + '-history'} className={styles.itemLink}>
+          <Link to={`/${section}/` + item.id} 
+          >{util.formatJapaneseDate(item.created)}</Link>
         </div>
       )}
     </div>
   );
 };
 
-PostHistory.propTypes = {
-  posts: PropTypes.arrayOf(
+ItemHistory.propTypes = {
+  items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
@@ -29,7 +29,8 @@ PostHistory.propTypes = {
       lastUpdated: PropTypes.instanceOf(Date),
       isPublic: PropTypes.bool.isRequired
     })
-  )
+  ),
+  section: PropTypes.string.isRequired
 };
 
-export default PostHistory;
+export default ItemHistory;

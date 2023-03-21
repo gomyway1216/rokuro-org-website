@@ -16,6 +16,8 @@ const EditInformationPage = () => {
   const [autoSave, setAutoSave] = useState(true);
   const [counter, setCounter] = useState(0);
   const [intervalId, setIntervalId] = useState();
+  const [autoSaveBody, setAutoSaveBody] = useState('');
+  const [autoSaveTitle, setAutoSaveTitle] = useState('');
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -42,6 +44,16 @@ const EditInformationPage = () => {
   useEffect(() => {
     getDoc();
   }, []);
+
+  //deep comparison of the body and title
+  const deepCompareBodyAndTitle = (body, title) => {
+    if(autoSaveBody !== body || autoSaveTitle !== title) {
+      setAutoSaveBody(body);
+      setAutoSaveTitle(title);
+      return true;
+    }
+    return false;
+  };
   
   useEffect(() => {
     if(autoSave) {
@@ -49,7 +61,9 @@ const EditInformationPage = () => {
         // The logic of changing counter value to come soon.
         setCounter(currCount => currCount + 1);
         try {
-          api.updateInformation(bodyRef.current);
+          if (deepCompareBodyAndTitle(bodyRef.current, titleRef.current)) {
+            api.updateInformation(bodyRef.current);
+          }
         } catch (err) {
           //TODO: create error log when failing more than 5 times
           console.log('updating the post is failing!');

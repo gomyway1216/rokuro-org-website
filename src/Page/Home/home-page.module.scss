@@ -2,7 +2,7 @@
 
   .home {
     position: relative;
-    background-image: url(../../asset/image/home.jpg);
+    background-image: url(../../asset/image/rokuro-background.jpg);
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -56,29 +56,26 @@
     }
   }
 
-  .postSection {
-    display: flex;
-    flex-direction: row;
-    margin-left: 5%;
-    margin-right: 5%;
-    padding-top: 56px;
+  .itemSection {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 40px;
+
+    .title {
+      font-size: xx-large;
+      font-weight: bold;
+      text-align: center;
+      padding-bottom: 8px;
+    }
+
+    .contents {
+      display: flex;
+      flex-direction: row;
+    }
   }
 
-
-  .post {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    // display: flex;
-    text-align: center;
-    // display: flex;
-    // flex-wrap: wrap;
-    // justify-content: center;
-    // justify-content:flex-end;
-    // align-items: baseline;
-    align-content: center;
-    overflow: hidden;
+  .postSection {
+    background-color: azure;
   }
 }
 

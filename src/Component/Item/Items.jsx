@@ -1,23 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as postApi from '../../Firebase/post';
-import Post from './Post';
-import styles from './posts.module.scss';
+import Item from './Item';
+import styles from './items.module.scss';
 
-const Posts = (props) => {
-  const { posts } = props;
+const Items = (props) => {
+  const { items, section } = props;
 
   return (
     <div className={styles.root}>
-      {posts.map(post =>
-        <Post post={post} key={post.id}/>
+      {items.map(item =>
+        <Item item={item} section={section} key={item.id}/>
       )}
     </div>
   );
 };
 
-Posts.propTypes = {
-  posts: PropTypes.arrayOf(
+Items.propTypes = {
+  items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
@@ -26,7 +25,8 @@ Posts.propTypes = {
       lastUpdated: PropTypes.instanceOf(Date),
       isPublic: PropTypes.bool.isRequired
     })
-  )
+  ),
+  section: PropTypes.string.isRequired
 };
 
-export default Posts;
+export default Items;

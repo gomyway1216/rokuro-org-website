@@ -93,6 +93,9 @@ const ApplicationBar = () => {
         <ListItemButton key="INFORMATION" onClick={()=> scrollToDiv('information', SCROLL_OFFSET)}>
           <ListItemText primary="INFORMATION" />
         </ListItemButton>
+        <ListItemButton key="NEWSLETTER" onClick={()=> scrollToDiv('newsLetter', SCROLL_OFFSET)}>
+          <ListItemText primary="NEWS LETTER" />
+        </ListItemButton>
         <ListItemButton key="POST" onClick={()=> scrollToDiv('post', SCROLL_OFFSET)}>
           <ListItemText primary="POST" />
         </ListItemButton>
@@ -129,6 +132,9 @@ const ApplicationBar = () => {
               </div>
               <div onClick={handleItemClick('information')} style={{cursor: 'pointer'}}>
                 Information
+              </div>
+              <div onClick={handleItemClick('newsLetter')} style={{cursor: 'pointer'}}>
+                News Letter
               </div>
               <div onClick={handleItemClick('post')} style={{cursor: 'pointer'}}>
                 Post

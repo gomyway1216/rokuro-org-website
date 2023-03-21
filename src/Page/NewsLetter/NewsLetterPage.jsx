@@ -1,10 +1,10 @@
 import React from 'react';
-import * as postApi from '../../Firebase/post';
+import * as newsLetterApi from '../../Firebase/newsLetter';
 import RichTextDisplay from '../../Component/Text/RichTextDisplay';
 
 const PostPage = () => {
   return (
-    <RichTextDisplay getApi={postApi.getPost} />
+    <RichTextDisplay getApi={newsLetterApi.getNewsLetter} />
   );
 };
 

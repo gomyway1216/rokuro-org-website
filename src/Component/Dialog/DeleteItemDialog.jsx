@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button,Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 
-const DeletePostDialog = (props) => {
+const DeleteItemDialog = (props) => {
   const [open, setOpen] = useState(props.open);
     
   useEffect(() => {
@@ -13,7 +13,7 @@ const DeletePostDialog = (props) => {
   return (
     <div>
       <Dialog open={open} onClose={() => props.onClose()} fullWidth>
-        <DialogTitle>Deleting Post</DialogTitle>
+        <DialogTitle>Deleting Item</DialogTitle>
         <DialogContent>
           {props.errorMessage ? props.errorMessage : 'Is that really ok?'}
         </DialogContent>
@@ -26,7 +26,7 @@ const DeletePostDialog = (props) => {
   );
 };
 
-DeletePostDialog.propTypes = {
+DeleteItemDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   callback: PropTypes.func.isRequired,
@@ -34,4 +34,4 @@ DeletePostDialog.propTypes = {
 };
 
 
-export default DeletePostDialog;
+export default DeleteItemDialog;

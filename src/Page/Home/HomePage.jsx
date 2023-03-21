@@ -1,26 +1,29 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useRefContext } from '../../Provider/RefProvider';
 import * as informationApi from '../../Firebase/information';
+import * as newsLetterApi from '../../Firebase/newsLetter';
 import * as postApi from '../../Firebase/post';
 import DOMPurify from 'dompurify';
-import styles from './home-page.module.scss';
-import Posts from '../../Component/Post/Posts';
-import PostHistory from '../../Component/Post/PostHistory';
+import Items from '../../Component/Item/Items';
+import ItemHistory from '../../Component/Item/ItemHistory';
 import rokuroIcon from '../../asset/icon/rokuro-icon.png';
+import styles from './home-page.module.scss';
 
-const POST_QUERY_NUM = 0;
 
 const HomePage = () => {
   const { addRefs } = useRefContext();
   const homeRef = useRef();
   const informationRef = useRef();
+  const newsLetterRef = useRef();
   const postRef = useRef();
   const [information, setInformation] = useState('');
   const [posts, setPosts] = useState([]);
+  const [newsLetters, setNewsLetters] = useState([]);
 
   const registerRefs = () => {
     const refList = [{ key: 'home', ref: homeRef } , 
       { key: 'information', ref: informationRef }, 
+      { key: 'newsLetter', ref: newsLetterRef },
       {key: 'post', ref: postRef }];
     addRefs(refList);
   };
@@ -28,6 +31,11 @@ const HomePage = () => {
   const getInformation = async () => {
     const info = await informationApi.getInformation();
     setInformation(info.body);
+  };
+
+  const getNewsLetters = async () => {
+    const result = await newsLetterApi.getPublicNewsLetters();
+    setNewsLetters(result);
   };
 
   const getPosts = async () => {
@@ -38,6 +46,7 @@ const HomePage = () => {
 
   useEffect(() => {
     getInformation();
+    getNewsLetters();
     getPosts();
     registerRefs();
   }, []);
@@ -72,9 +81,19 @@ const HomePage = () => {
           <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(information)}} />
         </div> 
       </div>
-      <div className={styles.postSection} ref={postRef} name="post">
-        <PostHistory posts={posts} />
-        <Posts posts={posts} />
+      <div className={styles.itemSection} ref={newsLetterRef} name="newsLetter">
+        <div className={styles.title}>ニュースレター</div>
+        <div className={styles.contents}>
+          <ItemHistory items={newsLetters} section="news-letter"/>
+          <Items items={newsLetters} section="news-letter"/>
+        </div>
+      </div>
+      <div className={`${styles.itemSection} ${styles.postSection}`} ref={postRef} name="post">
+        <div className={styles.title}>投稿</div>
+        <div className={styles.contents}>
+          <ItemHistory items={posts} section="post"/>
+          <Items items={posts} section="post"/>
+        </div>
       </div>
     </div>
 

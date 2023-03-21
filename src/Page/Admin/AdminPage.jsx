@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
-import * as api from '../../Firebase/post';
-import PostTable from '../../Component/Post/PostTable';
+import { useNavigate } from 'react-router-dom';
+import * as postApi from '../../Firebase/post';
+import * as newsLetterApi from '../../Firebase/newsLetter';
+import DataTable from '../../Component/Table/DataTable';
 import styles from './admin-page.module.scss';
 
 
@@ -10,27 +11,41 @@ const AdminPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const [newsLetters, setNewsLetters] = useState([]);
 
   const getPosts = async () => {
-    setLoading(true);
-    const ps = await api.getPosts();
+    const ps = await postApi.getPosts();
     setPosts(ps);
-    setLoading(false);
+  };
+
+  const getNewsLetters = async () => {
+    const nl = await newsLetterApi.getNewsLetters();
+    setNewsLetters(nl);
   };
 
   useEffect(() => {
+    getNewsLetters();
     getPosts();
+    setLoading(false);
   }, []);
 
   const handleCreatePost = async () => {
     // crete the post and get id for the post so that post page can do auto saving with the id
-    const docId = await api.createPost();
+    const docId = await postApi.createPost();
     navigate('/edit-post/' + docId);
+  };
+
+  const handleCreateNewsLetter = async () => {
+    // crete the news Letter and get id for the it so that post page can do auto saving with the id
+    const docId = await newsLetterApi.createNewsLetter();
+    navigate('/edit-news-letter/' + docId);
   };
 
   const handleEditInformation = () => {
     navigate('/edit-information/');
   };
+
+  console.log('loading', loading);
 
   if(loading) {
     return <div>Loading...</div>;
@@ -42,10 +57,29 @@ const AdminPage = () => {
       <div className={styles.buttons}>
         <Button variant="outlined" onClick={handleCreatePost}
           className={styles.button}>Create Post</Button>
+        <Button variant="outlined" onClick={handleCreateNewsLetter}
+          className={styles.button}>Create News Letter</Button>
         <Button variant="outlined" onClick={handleEditInformation}
           className={styles.button}>Edit Information</Button>
       </div>
-      <PostTable posts={posts} callback={getPosts}/>
+      <div className={styles.newsLetter}>
+        <div className={styles.subTitle}>News Letter Data</div>
+        <DataTable
+          data={newsLetters}
+          togglePublish={newsLetterApi.toggleNewsLetterPublish}
+          deleteData={newsLetterApi.deleteNewsLetter}
+          editLink="edit-news-letter"
+        />
+      </div>
+      <div className={styles.post}>
+        <div className={styles.subTitle}>Post Data</div>
+        <DataTable 
+          data={posts} 
+          togglePublish={postApi.togglePostPublish} 
+          deleteData={postApi.deletePost}
+          editLink="edit-post"
+        />
+      </div>
     </div>
   );
 };

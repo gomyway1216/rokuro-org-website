@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { IconButton, Switch, Tooltip } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridToolbarContainer, 
   GridToolbarColumnsButton, GridToolbarFilterButton, 
   GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useNavigate } from 'react-router-dom';
-import DeletePostDialog from '../Dialog/DeletePostDialog';
-import * as api from '../../Firebase/post';
+import DeleteItemDialog from '../Dialog/DeleteItemDialog';
 import InstantMessage from '../PopUp/Alert';
 
 
-const PostTable = (props) => {
+const DataTable = (props) => {
   const [loading, setLoading] = useState(false);
-  const [posts, setPosts] = useState(props.posts);
-  const navigate = useNavigate();
+  const [data, setData] = useState(props.data);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [deletePostId, setDeletePostId] = useState('');
+  const [deleteDataId, setDeleteDataId] = useState('');
+  const navigate = useNavigate();
 
   const columns = [
     { field: 'title', headerName: 'Title', flex: 1 },
@@ -57,18 +56,17 @@ const PostTable = (props) => {
           // store the checked state as map can not access new value 
           setLoading(true);
           const checked = e.target.checked;
-          const updateStatus = await api.togglePostPublish(params.row.id, checked);
+          const updateStatus = await props.togglePublish(params.row.id, checked);
           if(updateStatus) {
-            const newState = posts.map(post => {
-              if(post.id === params.row.id) {
-                return {...post, isPublic: checked};
+            const newState = data.map(value => {
+              if(value.id === params.row.id) {
+                return {...value, isPublic: checked};
               }
-              return post;
+              return value;
             });
-            console.log('updating post publish status is success');
-            setPosts(newState);
+            setData(newState);
           } else {
-            console.log('updating post publish status is failing');
+            setErrorMessage('Failed to update publish status');
           }
           setLoading(false);
         };
@@ -95,9 +93,10 @@ const PostTable = (props) => {
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
-          // open editor for this post
-          navigate('/edit-post/' + params.row.id);
+          // open editor
+          navigate('/' + props.editLink + '/' + params.row.id);
         };
+
         return (
           <Tooltip title="edit">
             <IconButton aria-label="edit" onClick={onClick} color="primary">
@@ -115,12 +114,14 @@ const PostTable = (props) => {
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
-          setDeletePostId(params.row.id);
+          // open dialog to confirm delete
+          setDeleteDataId(params.row.id);
           setDeleteDialogOpen(true);
         };
+
         return (
           <Tooltip title="delete">
-            <IconButton aria-label="delete" onClick={onClick} color="primary">
+            <IconButton aria-label="delete" onClick={onClick} color="secondary">
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -129,29 +130,36 @@ const PostTable = (props) => {
     }
   ];
 
+  useEffect(() => {
+    setData(props.data);
+  }, [props.data]);
+
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
   };
 
+  // this if block hs logical change from original one
   const handleDelete = async () => {
-    const updateStatus = await api.deletePost(deletePostId);
-    if(!updateStatus) {
-      const msg = 'deletion of the post is failing!';
-      setErrorMessage(msg);
+    setLoading(true);
+    const deleteStatus = await props.deleteData(deleteDataId);
+    if(deleteStatus) {
+      const newState = data.filter(value => value.id !== deleteDataId);
+      setData(newState);
     } else {
-      props.callback();
-      handleDeleteDialogClose();
+      setErrorMessage('Failed to delete value');
     }
+    setLoading(false);
+    setDeleteDialogOpen(false);
   };
 
   const handleAlertClose = () => {
     setErrorMessage('');
   };
-
+  
   return (
     <div>
       <DataGrid
-        rows={posts}
+        rows={data}
         columns={columns}
         components={{ Toolbar: () => {
           return (
@@ -160,7 +168,8 @@ const PostTable = (props) => {
               <GridToolbarFilterButton />
               <GridToolbarDensitySelector />
               <GridToolbarExport />
-            </GridToolbarContainer>);
+            </GridToolbarContainer>
+          );
         }}}
         initialState={{
           sorting: {
@@ -185,7 +194,7 @@ const PostTable = (props) => {
         }}
         loading={loading}
       />
-      <DeletePostDialog open={deleteDialogOpen} 
+      <DeleteItemDialog open={deleteDialogOpen} 
         onClose={handleDeleteDialogClose} callback={handleDelete} 
         errorMessage={errorMessage}/>
       {errorMessage && <InstantMessage message={errorMessage} 
@@ -194,9 +203,12 @@ const PostTable = (props) => {
   );
 };
 
-PostTable.propTypes = {
-  posts: PropTypes.array.isRequired,
-  callback: PropTypes.func.isRequired
+DataTable.propTypes = {
+  data: PropTypes.array.isRequired,
+  // callback: PropTypes.func.isRequired,
+  togglePublish: PropTypes.func.isRequired,
+  deleteData: PropTypes.func.isRequired,
+  editLink: PropTypes.string.isRequired
 };
 
-export default PostTable;
+export default DataTable;
