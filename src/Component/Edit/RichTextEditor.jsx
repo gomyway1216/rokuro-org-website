@@ -25,7 +25,7 @@ const RichTextEditor = (props) => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { id, getDoc, updateDoc, deleteDoc } = props;
+  const { id, getDoc, updateDoc, deleteDoc, bodyOnly } = props;
 
   const intervalIdRef = useRef(intervalId);
   intervalIdRef.current = intervalId;
@@ -163,11 +163,13 @@ const RichTextEditor = (props) => {
     <div className={styles.root}>
       <div className={styles.subSection}>
         <div className={styles.titleWrapper}>
-          <TextField id="outlined-basic" label="Title" 
-            variant="outlined" value={title} 
-            onChange={handleTitleChange}
-            className={styles.title}
-          />
+          { !bodyOnly && 
+              <TextField id="outlined-basic" label="Title" 
+                variant="outlined" value={title} 
+                onChange={handleTitleChange}
+                className={styles.title}
+              /> 
+          }
         </div>
         <div className={styles.switchWrapper}>
           <FormGroup>
@@ -181,17 +183,19 @@ const RichTextEditor = (props) => {
               } 
               label="Auto Save" />
           </FormGroup>
-          <FormGroup>
-            <FormControlLabel 
-              className={styles.switch}
-              control={
-                <Switch    
-                  checked={isPublic}
-                  onChange={onIsPublicSwitchChange}
-                />
-              } 
-              label="Publishing?" />
-          </FormGroup>
+          { !bodyOnly &&
+              <FormGroup>
+                <FormControlLabel 
+                  className={styles.switch}
+                  control={
+                    <Switch    
+                      checked={isPublic}
+                      onChange={onIsPublicSwitchChange}
+                    />
+                  } 
+                  label="Publishing?" />
+              </FormGroup>
+          }
         </div>
       </div>
       <div className={styles.toolBar}>
@@ -217,14 +221,16 @@ const RichTextEditor = (props) => {
           className={styles.button}>
             Close without Saving
         </Button>
-        <Button 
-          variant="outlined" 
-          color="error" 
-          onClick={() => setDeleteDialogOpen(true)}
-          className={styles.button}
-        >
-          Delete
-        </Button>
+        { !bodyOnly && 
+            <Button 
+              variant="outlined" 
+              color="error" 
+              onClick={() => setDeleteDialogOpen(true)}
+              className={styles.button}
+            >
+              Delete
+            </Button>
+        }
       </div>
       <DeleteItemDialog open={deleteDialogOpen} 
         onClose={handleDeleteDialogClose} callback={handleDelete} 
@@ -240,7 +246,8 @@ RichTextEditor.propTypes = {
   id: PropTypes.string.isRequired,
   getDoc: PropTypes.func.isRequired,
   updateDoc: PropTypes.func.isRequired,
-  deleteDoc: PropTypes.func.isRequired
+  deleteDoc: PropTypes.func,
+  bodyOnly: PropTypes.bool
 };
 
 export default RichTextEditor;

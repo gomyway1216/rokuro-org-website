@@ -45,8 +45,6 @@ const AdminPage = () => {
     navigate('/edit-information/');
   };
 
-  console.log('loading', loading);
-
   if(loading) {
     return <div>Loading...</div>;
   }

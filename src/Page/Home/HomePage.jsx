@@ -9,6 +9,7 @@ import ItemHistory from '../../Component/Item/ItemHistory';
 import rokuroIcon from '../../asset/icon/rokuro-icon.png';
 import styles from './home-page.module.scss';
 
+const docId = process.env.REACT_APP_INFORMATION_DOC_ID;
 
 const HomePage = () => {
   const { addRefs } = useRefContext();
@@ -29,7 +30,7 @@ const HomePage = () => {
   };
 
   const getInformation = async () => {
-    const info = await informationApi.getInformation();
+    const info = await informationApi.getInformation(docId);
     setInformation(info.body);
   };
 
@@ -89,7 +90,7 @@ const HomePage = () => {
         </div>
       </div>
       <div className={`${styles.itemSection} ${styles.postSection}`} ref={postRef} name="post">
-        <div className={styles.title}>投稿</div>
+        <div className={styles.title}>講演</div>
         <div className={styles.contents}>
           <ItemHistory items={posts} section="post"/>
           <Items items={posts} section="post"/>
